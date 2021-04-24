@@ -20,14 +20,17 @@ public interface UserDao {
             email VARCHAR NOT NULL,
             gender ENUM('MALE', 'FEMALE') NOT NULL,
             birthDate DATE NOT NULL,
-            enabled BIT NOT NULL
+            enabled BOOLEAN NOT NULL
         )
         """
     )
     void createTable();
 
-    @SqlUpdate("INSERT INTO users (username, password, name, email, gender, birthDate, enabled) VALUES (:username, :password, :name, :email, :gender, :birthDate, :enabled)")
-    @GetGeneratedKeys
+    @SqlUpdate("""
+                INSERT INTO users (username, password, name, email, gender, birthDate, enabled) 
+                VALUES (:username, :password, :name, :email, :gender, :birthDate, :enabled)
+                """)
+    @GetGeneratedKeys("id")
     long insertUser(@BindBean User user);
 
     @SqlQuery("SELECT * FROM users WHERE id = :id")
